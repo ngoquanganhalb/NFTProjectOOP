@@ -14,12 +14,37 @@ public class Nft {
     private String price;
     private String floor_price;
     private String volume;
+    private String url;
+    private String avg_price;
+    private String owners_percent;
+    private Double num;
 
-    @Override
-    public String toString() {
-        return "Nft{" + "rank=" + rank + ", name=" + name + ", price=" + price + ", floor_price=" + floor_price + ", volume=" + volume + '}';
+    public Double getNum() {
+        return num;
     }
 
+    public void setNum(Double num) {
+        this.num = num;
+    }
+
+    public String getOwners_percent() {
+        return owners_percent;
+    }
+
+    public void setOwners_percent(String owners_percent) {
+        this.owners_percent = owners_percent;
+    }
+    
+
+    public String getAvg_price() {
+        return avg_price;
+    }
+
+    public void setAvg_price(String avg_price) {
+        this.avg_price = avg_price;
+    }
+
+    
     public String getRank() {
         return rank;
     }
@@ -60,7 +85,12 @@ public class Nft {
         this.volume = volume;
     }
 
-    public Nft() {
+    public String getUrl() {
+        return url;
     }
 
+    public void setUrl(String url) {
+        this.url = url;
+    }
+   
 }

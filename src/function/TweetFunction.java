@@ -103,17 +103,15 @@ public class TweetFunction implements FUNCInterface<Tweet> {
         return filteredTweets;
     }
 
-    public String hottestHashtagByDay(String date) {
-        // hashmap save <hashtag,count>
+    public ArrayList<Tweet> tweetsWithHottestHashtagByDay(String date) {
         HashMap<String, Integer> hashtagCounts = new HashMap<>();
+        ArrayList<Tweet> tweetsWithHottestHashtag = new ArrayList<>();
 
         // Iterate through tweets to find tweets on the specified date
         for (Tweet tweet : read()) {
-            if (tweet.getDate().equals(date)) { // Assuming tweet.getDate() returns the date string
+            if (tweet.getDate().equals(date)) {
                 List<String> hashtags = tweet.getHashtag();
-                // Count hashtags in tweets created on the specified date
                 for (String hashtag : hashtags) {
-                    // Update hashtag count in the HashMap
                     hashtagCounts.put(hashtag, hashtagCounts.getOrDefault(hashtag, 0) + 1);
                 }
             }
@@ -129,35 +127,45 @@ public class TweetFunction implements FUNCInterface<Tweet> {
             }
         }
 
-        return hottestHashtag;
-    }
-
-    public String hottestHashtagByMonth(String monthYear) {
-        HashMap<String, Integer> hashtagCounts = new HashMap<>();
-
-        // Extract month and year from the provided input (e.g., "2023-12")
-        String[] parts = monthYear.split("-");
-        String targetMonth = parts[1]; // Extracting the month
-
-        // Iterate through tweets to find tweets in the specified month
+        // Retrieve tweets that contain the hottest hashtag
         for (Tweet tweet : read()) {
-            String tweetDate = tweet.getDate(); // Assuming tweet.getDate() returns the date string
-            String[] tweetDateParts = tweetDate.split("-");
-            String tweetMonth = tweetDateParts[1]; // Extracting the month from tweet's date
+            if (tweet.getDate().equals(date) && tweet.getHashtag().contains(hottestHashtag)) {
+                tweetsWithHottestHashtag.add(tweet);
+            }
+        }
 
-            if (tweetMonth.equals(targetMonth)) {
+        return tweetsWithHottestHashtag;
+    }
+
+    public ArrayList<Tweet> hottestHashtagByMonth(String yearMonth) {
+        HashMap<String, Integer> hashtagCounts = new HashMap<>();
+        ArrayList<Tweet> tweetsInMonth = new ArrayList<>();
+
+        String[] parts = yearMonth.split("-");
+        String targetYear = parts[0]; // Lấy năm
+        String targetMonth = parts[1]; // Lấy tháng
+
+        // Lặp qua các Tweet để tìm Tweet trong năm và tháng được chỉ định
+        for (Tweet tweet : read()) {
+            String tweetDate = tweet.getDate();
+            String[] tweetDateParts = tweetDate.split("-");
+            String tweetYear = tweetDateParts[0]; // Lấy năm từ ngày của Tweet
+            String tweetMonth = tweetDateParts[1]; // Lấy tháng từ ngày của Tweet
+
+            if (tweetYear.equals(targetYear) && tweetMonth.equals(targetMonth)) {
+                tweetsInMonth.add(tweet); // Thêm Tweet vào danh sách nếu nó được tạo ra trong năm và tháng cụ thể
+
                 List<String> hashtags = tweet.getHashtag();
-                // Count hashtags in tweets created in the specified month
+                // Đếm hashtag trong tweets của tháng và cập nhật số lần xuất hiện vào HashMap
                 for (String hashtag : hashtags) {
-                    // Update hashtag count in the HashMap
                     hashtagCounts.put(hashtag, hashtagCounts.getOrDefault(hashtag, 0) + 1);
                 }
             }
         }
 
-        // Find the hashtag with the highest count
-        String hottestHashtag = "";
+        // Tìm hashtag có số lần xuất hiện nhiều nhất trong tháng
         int maxCount = 0;
+        String hottestHashtag = "";
         for (Map.Entry<String, Integer> entry : hashtagCounts.entrySet()) {
             if (entry.getValue() > maxCount) {
                 maxCount = entry.getValue();
@@ -165,23 +173,39 @@ public class TweetFunction implements FUNCInterface<Tweet> {
             }
         }
 
-        return hottestHashtag;
+        // Lọc lại danh sách Tweet chỉ giữ lại những Tweet có chứa hashtag nhiều nhất
+        ArrayList<Tweet> hottestTweets = new ArrayList<>();
+        for (Tweet tweet : tweetsInMonth) {
+            if (tweet.getHashtag().contains(hottestHashtag)) {
+                hottestTweets.add(tweet);
+            }
+        }
+
+        return hottestTweets;
     }
 
-    public String hottestHashtagBetweenDates(String date1, String date2) {
+    private boolean isDateInRange(String tweetDate, String startDate, String endDate) {
+
+        return (tweetDate.compareTo(startDate) >= 0) && (tweetDate.compareTo(endDate) <= 0);
+    }
+
+    public ArrayList<Tweet> tweetsWithHottestHashtagBetweenDates(String date1, String date2) {
         HashMap<String, Integer> hashtagCounts = new HashMap<>();
+        ArrayList<Tweet> tweetsWithinDateRange = new ArrayList<>();
 
         // Iterate through tweets to find tweets within the specified date range
         for (Tweet tweet : read()) {
             String tweetDate = tweet.getDate(); // Assuming tweet.getDate() returns the date string
 
-            List<String> hashtags = tweet.getHashtag();
-            // Count hashtags in tweets created in the specified date range
-            for (String hashtag : hashtags) {
-                // Update hashtag count in the HashMap
-                hashtagCounts.put(hashtag, hashtagCounts.getOrDefault(hashtag, 0) + 1);
+            // Check if the tweet date is within the specified range
+            if (isDateInRange(tweetDate, date1, date2)) {
+                List<String> hashtags = tweet.getHashtag();
+                for (String hashtag : hashtags) {
+                    hashtagCounts.put(hashtag, hashtagCounts.getOrDefault(hashtag, 0) + 1);
+                }
+                // Collect tweets within the date range
+                tweetsWithinDateRange.add(tweet);
             }
-
         }
 
         // Find the hashtag with the highest count
@@ -194,9 +218,15 @@ public class TweetFunction implements FUNCInterface<Tweet> {
             }
         }
 
-        return hottestHashtag;
-    }
+        // Filter tweets that contain the hottest hashtag within the date range
+        ArrayList<Tweet> tweetsWithHottestHashtag = new ArrayList<>();
+        for (Tweet tweet : tweetsWithinDateRange) {
+            if (tweet.getHashtag().contains(hottestHashtag)) {
+                tweetsWithHottestHashtag.add(tweet);
+            }
+        }
 
-  
+        return tweetsWithHottestHashtag;
+    }
 
 }
