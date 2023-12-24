@@ -98,7 +98,6 @@ public class TweetFunction extends JsonParser implements FUNCInterface<Tweet> {
         targetHashtags.add(hashtag.toLowerCase()); // Case-insensitive search
 
         ArrayList<Tweet> filteredTweets = new ArrayList<>();
-
         // Iterate through all tweets
         for (Tweet tweet : read()) {
             // Check if the tweet contains any of the target hashtags

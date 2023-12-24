@@ -47,6 +47,7 @@
                         <Separator layoutX="53.0" layoutY="115.0" prefHeight="18.0" prefWidth="71.0" />
                         <Separator layoutX="53.0" layoutY="293.0" prefHeight="18.0" prefWidth="71.0" />
                         <Separator layoutX="55.0" layoutY="495.0" prefHeight="18.0" prefWidth="71.0" />
+                        <Button layoutX="20.0" layoutY="537.0" mnemonicParsing="false" onAction="#lienKetNgoai" prefHeight="34.0" prefWidth="142.0" styleClass="nav-btn" text="See on Twitter !" />
                      </children>
                      <styleClass>
                         <String fx:value="mainFxmlClass" />

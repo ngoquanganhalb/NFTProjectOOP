@@ -17,30 +17,25 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.stage.Stage;
 
-/**
- * FXML Controller class
- *
- * @author Admin
- */
-public class DisplaymainController implements Initializable {
+public class DisplaymainController  {
 
     private Stage stage;
     private Scene scene;
     private Parent root;
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-       @FXML
-    private Label lbtest;
+  
+  
+    @FXML
+    private RadioButton radiobtn1;
 
     @FXML
-    void logouttest(ActionEvent event) {
-        lbtest.setText("OK");
-    }
-    
+    private RadioButton radiobtn2;
+
+    @FXML
+    private RadioButton radiobtn3;
+
      @FXML
     void switchToNftDis(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/giaodienNft.fxml"));

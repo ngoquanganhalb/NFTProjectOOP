@@ -10,6 +10,7 @@ import function.TweetFunction;
 import model.Nft;
 import java.awt.Desktop;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,17 +39,22 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.web.WebView;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Tweet;
-import test.NftStatistics;
 
-/**
- *
- * @author Admin
- */
-public class NftViewController extends DisplaymainController implements Initializable {
+
+public class NftViewController extends DisplaymainController implements Initializable,LienKetBenNgoai {
+     @FXML
+    private RadioButton radiobtn1;
+
+    @FXML
+    private RadioButton radiobtn2;
+
+    @FXML
+    private RadioButton radiobtn3;
 
     @FXML
     private TableColumn<Nft, String> floorpricecol;
@@ -81,8 +87,7 @@ public class NftViewController extends DisplaymainController implements Initiali
     private TableColumn<Nft, Double> salecol;
     @FXML
     private BarChart<String, Integer> chart;
-  //  @FXML
-   // private BarChart<String, Number> chart;
+
     @Override
     void switchToHome(ActionEvent event) throws IOException {
         super.switchToHome(event); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
@@ -98,10 +103,7 @@ public class NftViewController extends DisplaymainController implements Initiali
         super.switchToNftDis(event); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
 
-    @Override
-    void logouttest(ActionEvent event) {
-        super.logouttest(event); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
+
     
 
 
@@ -190,7 +192,7 @@ public class NftViewController extends DisplaymainController implements Initiali
          rankcol.setVisible(true);
         salecol.setVisible(false);
         nftTable.getItems().clear();
-        ArrayList<Nft> list = NftFunction.getInstance().Search(textFieldSearch.getText());
+        ArrayList<Nft> list = NftFunction.getInstance().search(textFieldSearch.getText());
         addToTable(list);
     }
 
@@ -210,10 +212,10 @@ public class NftViewController extends DisplaymainController implements Initiali
     NftFunction nftFunction = NftFunction.getInstance();
     LinkedHashMap<String, Integer> nftNameCount = nftFunction.countNftNamesInTweetsAndHashtags(tweets, nfts);
 
-    // Sort the map entries by value (count) in descending order
+    // Them du lieu vao bang
     List<Map.Entry<String, Integer>> sortedEntries = nftNameCount.entrySet().stream()
             .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-            .limit(10) // Limit to the top 10 entries
+            .limit(10) // Limit 10 
             .collect(Collectors.toList());
 
     XYChart.Series<String, Integer> series = new XYChart.Series<>();
@@ -226,4 +228,21 @@ public class NftViewController extends DisplaymainController implements Initiali
     chart.setVisible(true);
     nftTable.setVisible(false);
 }
+
+    @Override
+    public void lienKetNgoai(ActionEvent event) throws IOException {
+         String url = "https://opensea.io/"; // URL to navigate to
+
+        try {
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                Desktop.getDesktop().browse(new URI(url));
+            } else {
+                // If the desktop doesn't support browsing, you can handle this case here
+                System.out.println("Desktop browsing not supported!");
+            }
+        } catch (Exception e) {
+            // Handle exceptions, such as URISyntaxException or IOException
+            e.printStackTrace();
+        }
+    }
 }

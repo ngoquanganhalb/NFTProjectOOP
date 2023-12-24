@@ -48,6 +48,7 @@
                         <Separator layoutX="53.0" layoutY="115.0" prefHeight="18.0" prefWidth="71.0" />
                         <Separator layoutX="53.0" layoutY="293.0" prefHeight="18.0" prefWidth="71.0" />
                         <Separator layoutX="55.0" layoutY="495.0" prefHeight="18.0" prefWidth="71.0" />
+                        <Button layoutX="17.0" layoutY="535.0" mnemonicParsing="false" onAction="#lienKetNgoai" prefHeight="35.0" prefWidth="148.0" styleClass="nav-btn" text="See on Opensea !" />
                      </children>
                      <styleClass>
                         <String fx:value="mainFxmlClass" />

@@ -30,22 +30,20 @@ public class NftFunction extends JsonParser implements FUNCInterface<Nft> {
 
         return new NftFunction();
     }
-    public NftFunction (){
-            setFilename("C:\\Users\\Admin\\Downloads\\NFTs.json");
+
+    public NftFunction() {
+        setFilename("C:\\Users\\Admin\\Downloads\\NFTs.json");
     }
-
-
 
     @Override
     protected String getJSONFromFile() {
         return super.getJSONFromFile(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
-    
-    
+
     @Override
     public ArrayList<Nft> read() {
 
-        String jsonString = getJSONFromFile(); 
+        String jsonString = getJSONFromFile();
 
         List<Nft> nftList = new ArrayList<Nft>();
 
@@ -97,7 +95,7 @@ public class NftFunction extends JsonParser implements FUNCInterface<Nft> {
 
     }
 
-    public ArrayList<Nft> Search(String name) {
+    public ArrayList<Nft> search(String name) {
         ArrayList<Nft> List = new ArrayList<>();
         for (Nft nft : read()) {
             if (nft.getName() != null && nft.getName().equalsIgnoreCase(name)) {
@@ -196,63 +194,25 @@ public class NftFunction extends JsonParser implements FUNCInterface<Nft> {
     public ArrayList<Nft> sortDiscount() {
         List<Nft> nftList = discount(); // Gọi hàm discount() để lấy danh sách đã được tính giảm giá
 
-        // Sắp xếp danh sách theo giá trị của 'num' giảm dần bằng Lambda Expression (Java 8+)
+        // Sắp xếp danh sách theo giá trị num giảmm dần 
         nftList.sort((nft1, nft2) -> Double.compare(nft2.getNum(), nft1.getNum()));
 
         return (ArrayList<Nft>) nftList;
     }
-    /*
-        public Map<String, Integer> countNftNamesInTweetsAndHashtags(List<Tweet> tweets, List<Nft> nfts) {
-        Map<String, Integer> nftNameCount = new HashMap<>();
 
-        // Extract NFT names
-        List<String> nftNames = nfts.stream().map(Nft::getName).collect(Collectors.toList());
-
-        // Process each tweet
-        for (Tweet tweet : tweets) {
-            // Process tweet content
-            String content = tweet.getContent().replaceAll("\\s", "").toLowerCase(); // Remove spaces and convert to lowercase
-            boolean nftFoundInContent = false;
-
-            // Process content for NFT names
-            for (String nftName : nftNames) {
-                String processedNftName = nftName.replaceAll("\\s", "").toLowerCase(); // Remove spaces and convert to lowercase
-                if (content.contains(processedNftName) && !nftFoundInContent) {
-                    nftNameCount.put(nftName, nftNameCount.getOrDefault(nftName, 0) + 1);
-                    nftFoundInContent = true; // Mark the NFT name as found in content
-                }
-            }
-
-            // Process tweet hashtags if NFT name not found in content
-            if (!nftFoundInContent) {
-                List<String> hashtags = tweet.getHashtag();
-                for (String hashtag : hashtags) {
-                    for (String nftName : nftNames) {
-                        String processedNftName = nftName.replaceAll("\\s", "").toLowerCase(); // Remove spaces and convert to lowercase
-                        if (hashtag.replaceAll("\\s", "").toLowerCase().contains(processedNftName)) {
-                            nftNameCount.put(nftName, nftNameCount.getOrDefault(nftName, 0) + 1);
-                            break; // Break the loop after finding the NFT name in hashtag
-                        }
-                    }
-                }
-            }
-        }
-
-        return nftNameCount;
-    }*/
     public LinkedHashMap<String, Integer> countNftNamesInTweetsAndHashtags(List<Tweet> tweets, List<Nft> nfts) {
         Map<String, Integer> nftNameCount = new HashMap<>();
 
-        // Extract NFT names
+        // Lấy danh sách tên nft
         List<String> nftNames = nfts.stream().map(Nft::getName).collect(Collectors.toList());
 
-        // Process each tweet
+        // xử lý từng tweets
         for (Tweet tweet : tweets) {
-            // Process tweet content
+            // nội dung tweet bỏ dấu cachs và chuyển hết về lowercase
             String content = tweet.getContent().replaceAll("\\s", "").toLowerCase();
             boolean nftFoundInContent = false;
 
-            // Process content for NFT names
+            // xử lý từng nft, bỏ dấu cách trong tên nft và chuyển về lowercase
             for (String nftName : nftNames) {
                 String processedNftName = nftName.replaceAll("\\s", "").toLowerCase();
                 if (content.contains(processedNftName) && !nftFoundInContent) {
@@ -260,7 +220,6 @@ public class NftFunction extends JsonParser implements FUNCInterface<Nft> {
                     nftFoundInContent = true;
                 }
             }
-
             if (!nftFoundInContent) {
                 List<String> hashtags = tweet.getHashtag();
                 for (String hashtag : hashtags) {
@@ -275,7 +234,7 @@ public class NftFunction extends JsonParser implements FUNCInterface<Nft> {
             }
         }
 
-        // Sort the map by value (count) from high to low
+        // sắp xếp map theo chiều giảm giá trị valuue
         LinkedHashMap<String, Integer> sortedNftNameCount = nftNameCount.entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
@@ -283,5 +242,4 @@ public class NftFunction extends JsonParser implements FUNCInterface<Nft> {
         return sortedNftNameCount;
     }
 
-   
 }
